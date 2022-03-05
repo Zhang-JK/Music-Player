@@ -12,6 +12,8 @@ from Crypto.Cipher import AES
 import requests
 from PIL import Image
 
+link = "http://localhost:3000"
+
 
 class showpng(Thread):
     def __init__(self, data):
@@ -26,7 +28,7 @@ class showpng(Thread):
 def login():
     session = requests.session()
     session.cookies = LWPCookieJar(filename='wyy-cookies.cookie')
-    getlogin = session.get('http://localhost:3000/login/qr/key', params={'timestamp': datetime.now().timestamp()}).json()
+    getlogin = session.get(link + '/login/qr/key', params={'timestamp': datetime.now().timestamp()}).json()
 
     pngurl = 'https://music.163.com/login?codekey=' + getlogin['data']['unikey'] + '&refer=scan'
     qr = qrcode.QRCode()
@@ -39,9 +41,10 @@ def login():
     t = showpng(png)
     t.start()
 
-    tokenurl = 'http://localhost:3000/login/qr/check'
+    tokenurl = link + '/login/qr/check'
     while 1:
-        qrcodedata = session.get(tokenurl, params={'key': getlogin['data']['unikey'], 'timestamp': datetime.now().timestamp()}).json()
+        qrcodedata = session.get(tokenurl, params={'key': getlogin['data']['unikey'],
+                                                   'timestamp': datetime.now().timestamp()}).json()
         if '801' in str(qrcodedata['code']):
             print('二维码未失效，请扫码！')
         elif '802' in str(qrcodedata['code']):
@@ -54,6 +57,7 @@ def login():
         time.sleep(2)
     print(qrcodedata)
     session.cookies.save(ignore_discard=True, ignore_expires=True)
+
 
 if __name__ == '__main__':
     login()
