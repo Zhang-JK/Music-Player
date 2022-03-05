@@ -1,14 +1,10 @@
-import base64
-import codecs
 from datetime import datetime
 import time
 from http.cookiejar import LWPCookieJar
 from io import BytesIO
 from threading import Thread
 
-import agent
 import qrcode
-from Crypto.Cipher import AES
 import requests
 from PIL import Image
 
@@ -34,12 +30,7 @@ def login():
     qr = qrcode.QRCode()
     qr.add_data(pngurl)
     img = qr.make_image()
-    a = BytesIO()
-    img.save(a, 'png')
-    png = a.getvalue()
-    a.close()
-    t = showpng(png)
-    t.start()
+    img.save('./wyy-login-qrcode.png')
 
     tokenurl = link + '/login/qr/check'
     while 1:

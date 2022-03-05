@@ -28,12 +28,7 @@ def login():
     qr = qrcode.QRCode()
     qr.add_data(loginurl)
     img = qr.make_image()
-    a = BytesIO()
-    img.save(a, 'png')
-    png = a.getvalue()
-    a.close()
-    t = ShowPNG(png)
-    t.start()
+    img.save('./bili-login-qrcode.png')
 
     tokenurl = 'https://passport.bilibili.com/qrcode/getLoginInfo'
     while 1:
