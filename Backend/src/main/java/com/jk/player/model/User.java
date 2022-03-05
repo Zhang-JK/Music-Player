@@ -1,4 +1,4 @@
-package com.jk.player.pojo;
+package com.jk.player.model;
 
 import javax.persistence.*;
 import java.util.LinkedHashSet;
