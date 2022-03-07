@@ -53,7 +53,19 @@ def bili_login():
             break
 
 
+def bili_fav_list():
+    session = requests.session()
+    load_cookiejar = LWPCookieJar()
+    load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
+    session.cookies = load_cookiejar
+
+    bili_fav_list = session.post(host + '/bili/fav-list', headers=headers).json()
+    print(bili_fav_list)
+
+
+
 if __name__ == '__main__':
-    login()
-    time.sleep(2)
-    bili_login()
+    # login()
+    # time.sleep(2)
+    # bili_login()
+    bili_fav_list()

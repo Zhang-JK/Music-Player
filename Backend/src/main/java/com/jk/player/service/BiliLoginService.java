@@ -5,6 +5,7 @@ import com.jk.player.dao.UserCookieDAO;
 import com.jk.player.model.User;
 import com.jk.player.model.UserCookie;
 import com.jk.player.result.ResponseCode;
+import com.jk.player.utils.CookieHandler;
 import com.jk.player.utils.Platforms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -14,6 +15,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -49,19 +51,31 @@ public class BiliLoginService {
         }
 
         UserCookie userCookie = userCookieDAO.findByUserAndPlatform(user, Platforms.BILI.getNumVal());
+        List<String> cookies = response.getHeaders().get("Set-Cookie");
         if(userCookie == null) {
             UserCookie newUserCookie = new UserCookie();
             newUserCookie.setUser(user);
             newUserCookie.setPlatform(Platforms.BILI.getNumVal());
-            newUserCookie.setData(Objects.requireNonNull(response.getHeaders().get("Set-Cookie")).toString());
+            newUserCookie.setData(CookieHandler.setCookie(cookies));
             newUserCookie.setUpdateTime(Instant.now());
             userCookieDAO.save(newUserCookie);
         } else {
-            userCookie.setData(Objects.requireNonNull(response.getHeaders().get("Set-Cookie")).toString());
+            userCookie.setData(CookieHandler.setCookie(cookies));
             userCookie.setUpdateTime(Instant.now());
             userCookieDAO.save(userCookie);
         }
-        System.out.println(response.getHeaders().get("Set-Cookie"));
+
         return ResponseCode.SUCCESS;
+    }
+
+    public boolean isLogin(User user) {
+        UserCookie userCookie = userCookieDAO.findByUserAndPlatform(user, Platforms.BILI.getNumVal());
+        MultiValueMap<String, String> request = new LinkedMultiValueMap<>();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Cookie", userCookie.getData());
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(request, headers);
+
+        ResponseEntity<JSONObject> response = restTemplate.exchange("https://api.bilibili.com/x/web-interface/nav", HttpMethod.GET, requestEntity, JSONObject.class);
+        return !Objects.requireNonNull(response.getBody()).getStr("code").equals("-101");
     }
 }
