@@ -31,10 +31,10 @@ public class BiliLoginService {
     }
 
     public ResponseCode checkBiliLogin(String oauthKey, User user) {
-        MultiValueMap<String, String> request = new LinkedMultiValueMap<>();
+        MultiValueMap<String, Object> request = new LinkedMultiValueMap<>();
         request.add("oauthKey", oauthKey);
         HttpHeaders headers = new HttpHeaders();
-        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(request, headers);
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(request, headers);
 
         ResponseEntity<JSONObject> response = restTemplate.exchange("https://passport.bilibili.com/qrcode/getLoginInfo", HttpMethod.POST, requestEntity, JSONObject.class);
         if(!Objects.requireNonNull(response.getBody()).getBool("status")) {
@@ -69,13 +69,16 @@ public class BiliLoginService {
     }
 
     public boolean isLogin(User user) {
+        ResponseEntity<JSONObject> response = biliRequestWithCookie("https://api.bilibili.com/x/web-interface/nav", HttpMethod.GET, null, user);
+        return !Objects.requireNonNull(response.getBody()).getStr("code").equals("-101");
+    }
+
+    public ResponseEntity<JSONObject> biliRequestWithCookie(String url, HttpMethod method, LinkedMultiValueMap<String, Object> request, User user) {
         UserCookie userCookie = userCookieDAO.findByUserAndPlatform(user, Platforms.BILI.getNumVal());
-        MultiValueMap<String, String> request = new LinkedMultiValueMap<>();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cookie", userCookie.getData());
-        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(request, headers);
+        HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(request, headers);
 
-        ResponseEntity<JSONObject> response = restTemplate.exchange("https://api.bilibili.com/x/web-interface/nav", HttpMethod.GET, requestEntity, JSONObject.class);
-        return !Objects.requireNonNull(response.getBody()).getStr("code").equals("-101");
+        return restTemplate.exchange(url, method, requestEntity, JSONObject.class);
     }
 }

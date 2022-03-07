@@ -1,10 +1,10 @@
 package com.jk.player.controller;
 
-import cn.hutool.json.JSONObject;
+import com.jk.player.model.User;
 import com.jk.player.response.BiliFavListResponse;
-import com.jk.player.response.BiliLoginResponse;
 import com.jk.player.result.BaseResult;
 import com.jk.player.result.ResponseCode;
+import com.jk.player.service.BiliFavService;
 import com.jk.player.service.BiliLoginService;
 import com.jk.player.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +23,22 @@ public class BiliFavController {
     BiliLoginService biliLoginService;
 
     @Autowired
+    BiliFavService biliFavService;
+
+    @Autowired
     LoginService loginService;
 
     @CrossOrigin
     @PostMapping(value = "/api/bili/fav-list")
     @ResponseBody
     public BaseResult<List<BiliFavListResponse>> biliFavList(@CookieValue(value = "session", defaultValue = "NULL") String session, @CookieValue(value = "username") String username) {
-        if(!biliLoginService.isLogin(loginService.getUser(username)))
+        User user = loginService.getUser(username);
+        if(!biliLoginService.isLogin(user))
             return new BaseResult<>(ResponseCode.BILI_NOT_LOGIN);
 
-        return new BaseResult<>(ResponseCode.SUCCESS, null);
+        List<BiliFavListResponse> list = biliFavService.getBiliFavList(user);
+        if(list == null) new BaseResult<>(ResponseCode.SERVER_ERROR);
+
+        return new BaseResult<>(ResponseCode.SUCCESS, list);
     }
 }

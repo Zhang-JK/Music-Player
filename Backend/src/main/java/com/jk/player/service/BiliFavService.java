@@ -1,15 +1,37 @@
 package com.jk.player.service;
 
+import cn.hutool.json.JSONObject;
+import com.jk.player.dao.UserCookieDAO;
 import com.jk.player.model.User;
 import com.jk.player.response.BiliFavListResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class BiliFavService {
 
-    List<BiliFavListResponse> getBiliFavList(User user) {
-        return null;
+    @Autowired
+    UserCookieDAO userCookieDAO;
+
+    @Autowired
+    BiliLoginService biliLoginService;
+
+    public List<BiliFavListResponse> getBiliFavList(User user) {
+        ResponseEntity<JSONObject> info = biliLoginService.biliRequestWithCookie("http://api.bilibili.com/x/web-interface/nav", HttpMethod.GET, null, user);
+        Integer mid = Objects.requireNonNull(info.getBody()).getJSONObject("data").getInt("mid");
+
+        ResponseEntity<JSONObject> response = biliLoginService.biliRequestWithCookie("http://api.bilibili.com/x/v3/fav/folder/created/list-all"+"?up_mid="+mid.toString(), HttpMethod.GET, null, user);
+        if(Objects.requireNonNull(response.getBody()).isNull("data"))
+            return null;
+
+        return response.getBody().getJSONObject("data").getJSONArray("list").toList(BiliFavListResponse.class);
     }
 }
