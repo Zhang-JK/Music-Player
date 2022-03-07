@@ -10,15 +10,17 @@ public class UserCookie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(name = "platform", nullable = false)
     private Integer platform;
 
-    @Column(name = "location", nullable = false, length = 512)
-    private String location;
+    @Lob
+    @Column(name = "data", nullable = false)
+    private String data;
 
     @Column(name = "update_time", nullable = false)
     private Instant updateTime;
@@ -31,12 +33,12 @@ public class UserCookie {
         this.updateTime = updateTime;
     }
 
-    public String getLocation() {
-        return location;
+    public String getData() {
+        return data;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setData(String data) {
+        this.data = data;
     }
 
     public Integer getPlatform() {
@@ -62,5 +64,4 @@ public class UserCookie {
     public void setId(Integer id) {
         this.id = id;
     }
-
 }

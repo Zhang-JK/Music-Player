@@ -22,6 +22,7 @@ def login():
     session.cookies = LWPCookieJar(filename='bili-cookies.cookie')
 
     getlogin = session.get('https://passport.bilibili.com/qrcode/getLoginUrl').json()
+    print(getlogin)
     loginurl = getlogin['data']['url']
     oauthKey = getlogin['data']['oauthKey']
 
@@ -29,6 +30,8 @@ def login():
     qr.add_data(loginurl)
     img = qr.make_image()
     img.save('./bili-login-qrcode.png')
+
+    session.cookies.clear()
 
     tokenurl = 'https://passport.bilibili.com/qrcode/getLoginInfo'
     while 1:

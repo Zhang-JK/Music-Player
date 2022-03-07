@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Locale;
 
 @Controller
 public class LoginController {
@@ -23,14 +22,14 @@ public class LoginController {
     @CrossOrigin
     @PostMapping(value = "/api/login")
     @ResponseBody
-    public BaseResult login(@RequestBody User requestUser, HttpServletResponse response) {
+    public BaseResult<String> login(@RequestBody User requestUser, HttpServletResponse response) {
         User user = loginService.getUser(requestUser.getUsername());
-        if (user == null) return new BaseResult(ResponseCode.LOGIN_USER_NOT_EXIST);
+        if (user == null) return new BaseResult<>(ResponseCode.LOGIN_USER_NOT_EXIST);
 
         // database password: md5(md5(raw) + salt)
         // request password: md5(raw)
         if (!user.getPassword().equalsIgnoreCase(SecureUtil.md5(requestUser.getPassword() + user.getSalt())))
-            return new BaseResult(ResponseCode.LOGIN_WRONG_PASSWORD);
+            return new BaseResult<>(ResponseCode.LOGIN_WRONG_PASSWORD);
 
         String session = loginService.generateSession(user.getId());
         Cookie sessionCookie = new Cookie("session", session);
@@ -42,6 +41,6 @@ public class LoginController {
         response.addCookie(sessionCookie);
         response.addCookie(usernameCookie);
 
-        return new BaseResult(ResponseCode.SUCCESS);
+        return new BaseResult<>(ResponseCode.SUCCESS);
     }
 }
