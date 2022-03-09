@@ -4,7 +4,6 @@ import cn.hutool.json.JSONObject;
 import com.jk.player.model.User;
 import com.jk.player.response.PlatformFavListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
