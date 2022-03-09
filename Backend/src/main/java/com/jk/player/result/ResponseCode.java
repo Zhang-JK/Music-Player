@@ -17,7 +17,10 @@ public enum ResponseCode {
     PLATFORM_NOT_LOGIN(1101, "Platform not login"),
     PLATFORM_LOGIN_NOT_SCAN(1202, "Platform qrcode not scan"),
     PLATFORM_LOGIN_NOT_CONFIRM(1303, "Platform qrcode not confirm"),
-    PLATFORM_LOGIN_URL_EXPIRED(1404, "Platform qrcode url expired");
+    PLATFORM_LOGIN_URL_EXPIRED(1404, "Platform qrcode url expired"),
+
+    // import song error
+    IMPORT_ERROR(1201, "Import song error");
 
     private final int code;
     private final String message;

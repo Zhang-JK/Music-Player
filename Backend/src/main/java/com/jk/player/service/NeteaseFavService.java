@@ -1,5 +1,6 @@
 package com.jk.player.service;
 
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import com.jk.player.model.User;
 import com.jk.player.response.PlatformFavListResponse;
@@ -28,7 +29,7 @@ public class NeteaseFavService {
         param.put("u", userId);
         param.put("t", Instant.now().getEpochSecond());
         ResponseEntity<JSONObject> response = neteaseLoginService.neteaseRequestWithCookie("http://localhost:3000/user/playlist", "?timestamp={t}&uid={u}", param, user);
-        if(Objects.requireNonNull(response.getBody()).isNull("playlist"))
+        if (Objects.requireNonNull(response.getBody()).isNull("playlist"))
             return null;
 
         response.getBody().getJSONArray("playlist").replaceAll(item -> {
@@ -40,29 +41,47 @@ public class NeteaseFavService {
         return response.getBody().getJSONArray("playlist").toList(PlatformFavListResponse.class);
     }
 
-    public List<PlatformListDetailResponse> getNeteaseListDetail(User user, Integer listId, Integer limit, Integer offset) {
+    public JSONArray getNeteaseListDetailRequest(User user, Integer listId, Integer limit, Integer offset) {
         Map<String, Object> param = new HashMap<>();
         String paramList = "?timestamp={t}&id={id}";
         param.put("t", Instant.now().getEpochSecond());
         param.put("id", listId);
-        if(limit != null) {
+        if (limit != null) {
             param.put("limit", limit);
             paramList += "&limit={limit}";
         }
-        if(offset != null) {
+        if (offset != null) {
             param.put("offset", offset);
             paramList += "&offset={offset}";
         }
         ResponseEntity<JSONObject> response = neteaseLoginService.neteaseRequestWithCookie("http://localhost:3000/playlist/track/all", paramList, param, user);
-        if(Objects.requireNonNull(response.getBody()).isNull("songs"))
+        if (Objects.requireNonNull(response.getBody()).isNull("songs"))
             return null;
 
-        response.getBody().getJSONArray("songs").replaceAll(item -> {
+        return response.getBody().getJSONArray("songs");
+    }
+
+    public JSONArray getNeteaseSongList(List<Integer> id, User user) {
+        String ids = id.toString().replace("[", "").replace("]", "");
+        Map<String, Object> param = new HashMap<>();
+        param.put("ids", ids);
+        ResponseEntity<JSONObject> response = neteaseLoginService.neteaseRequestWithCookie("http://localhost:3000/song/detail", "?ids={ids}", param, user);
+
+        if (Objects.requireNonNull(response.getBody()).isNull("songs"))
+            return null;
+
+        return response.getBody().getJSONArray("songs");
+    }
+
+    public List<PlatformListDetailResponse> getNeteaseListDetail(User user, Integer listId, Integer limit, Integer offset) {
+        JSONArray songArray = getNeteaseListDetailRequest(user, listId, limit, offset);
+
+        songArray.replaceAll(item -> {
             JSONObject obj = (JSONObject) item;
             obj.put("creator", obj.getJSONArray("ar").getJSONObject(0).getStr("name"));
             obj.put("coverUrl", obj.getJSONObject("al").getStr("picUrl"));
             return obj;
         });
-        return response.getBody().getJSONArray("songs").toList(PlatformListDetailResponse.class);
+        return songArray.toList(PlatformListDetailResponse.class);
     }
 }

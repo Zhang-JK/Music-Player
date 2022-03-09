@@ -2,6 +2,7 @@ package com.jk.player.service;
 
 import cn.hutool.json.JSONObject;
 import com.jk.player.dao.UserCookieDAO;
+import com.jk.player.model.Song;
 import com.jk.player.model.User;
 import com.jk.player.response.PlatformFavListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,9 @@ public class BiliFavService {
             return null;
 
         return response.getBody().getJSONObject("data").getJSONArray("list").toList(PlatformFavListResponse.class);
+    }
+
+    public List<Song> getBiliSongList(List<Integer> id, User user) {
+        return null;
     }
 }

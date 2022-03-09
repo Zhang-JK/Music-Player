@@ -12,10 +12,10 @@ public class Song {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(name = "name", nullable = false, length = 256)
     private String name;
 
-    @Column(name = "artist", nullable = false, length = 50)
+    @Column(name = "artist", nullable = false, length = 256)
     private String artist;
 
     @Column(name = "avatar", length = 512)
@@ -30,7 +30,10 @@ public class Song {
     @Column(name = "serial", length = 512)
     private String serial;
 
-    @ManyToMany(mappedBy = "songs")
+    @ManyToMany
+    @JoinTable(name = "list_item",
+            joinColumns = @JoinColumn(name = "song_id"),
+            inverseJoinColumns = @JoinColumn(name = "list_id"))
     private Set<List> lists = new LinkedHashSet<>();
 
     public Set<List> getLists() {
@@ -96,5 +99,4 @@ public class Song {
     public void setId(Long id) {
         this.id = id;
     }
-
 }
