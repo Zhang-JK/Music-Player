@@ -117,6 +117,16 @@ def netease_fav_list():
     print(netease_fav_list)
 
 
+def netease_list_detail():
+    session = requests.session()
+    load_cookiejar = LWPCookieJar()
+    load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
+    session.cookies = load_cookiejar
+
+    detail = session.post(host + '/netease/list-detail', params={'id': 26460971, 'offset': 1, 'limit': 10}, headers=headers).json()
+    print(detail)
+
+
 if __name__ == '__main__':
     # login()
     # time.sleep(2)
@@ -125,4 +135,5 @@ if __name__ == '__main__':
     # netease_login()
     # netease_login_check()
     # bili_login_check()
-    netease_fav_list()
+    # netease_fav_list()
+    netease_list_detail()

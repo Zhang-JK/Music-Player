@@ -18,6 +18,7 @@ def get_all_list():
     song_lists = session.get(link + '/user/playlist', params={'uid': info['account']['id'], 'limit': 3, 'timestamp': datetime.now().timestamp()}).json()
     print(song_lists['playlist'][0])
     songs = session.get(link + '/playlist/track/all', params={'id': song_lists['playlist'][0]['id'], 'limit': 20, 'timestamp': datetime.now().timestamp()}).json()
+    print(songs)
     print(songs['songs'][3]['name'], songs['songs'][3]['id'])
     song_url = session.get(link + '/song/url', params={'id': songs['songs'][3]['id'], 'timestamp': datetime.now().timestamp()}).json()
     print(song_url['data'][0]['url'])
