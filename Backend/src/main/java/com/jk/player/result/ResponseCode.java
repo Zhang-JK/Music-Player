@@ -13,11 +13,11 @@ public enum ResponseCode {
     LOGIN_WRONG_PASSWORD(1002, "Wrong password"),
     LOGIN_USER_NOT_EXIST(1003, "User not exist"),
 
-    // bili account error
-    BILI_NOT_LOGIN(1101, "Bili not login"),
-    BILI_LOGIN_NOT_SCAN(1202, "Bili qrcode not scan"),
-    BILI_LOGIN_NOT_CONFIRM(1303, "Bili qrcode not confirm"),
-    BILI_LOGIN_URL_EXPIRED(1404, "Bili qrcode url expired");
+    // platform account error
+    PLATFORM_NOT_LOGIN(1101, "Platform not login"),
+    PLATFORM_LOGIN_NOT_SCAN(1202, "Platform qrcode not scan"),
+    PLATFORM_LOGIN_NOT_CONFIRM(1303, "Platform qrcode not confirm"),
+    PLATFORM_LOGIN_URL_EXPIRED(1404, "Platform qrcode url expired");
 
     private final int code;
     private final String message;

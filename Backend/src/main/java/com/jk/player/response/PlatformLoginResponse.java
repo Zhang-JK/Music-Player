@@ -1,6 +1,6 @@
 package com.jk.player.response;
 
-public class BiliLoginResponse {
+public class PlatformLoginResponse {
     private String url;
     private String oauthKey;
 

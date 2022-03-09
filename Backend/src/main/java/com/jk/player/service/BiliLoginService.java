@@ -40,30 +40,20 @@ public class BiliLoginService {
         if(!Objects.requireNonNull(response.getBody()).getBool("status")) {
             switch (response.getBody().getInt("data")) {
                 case -4:
-                    return ResponseCode.BILI_LOGIN_NOT_SCAN;
+                    return ResponseCode.PLATFORM_LOGIN_NOT_SCAN;
                 case -5:
-                    return ResponseCode.BILI_LOGIN_NOT_CONFIRM;
+                    return ResponseCode.PLATFORM_LOGIN_NOT_CONFIRM;
                 case -2:
-                    return ResponseCode.BILI_LOGIN_URL_EXPIRED;
+                    return ResponseCode.PLATFORM_LOGIN_URL_EXPIRED;
                 default:
-                    return ResponseCode.BILI_NOT_LOGIN;
+                    return ResponseCode.PLATFORM_NOT_LOGIN;
             }
         }
 
         UserCookie userCookie = userCookieDAO.findByUserAndPlatform(user, Platforms.BILI.getNumVal());
         List<String> cookies = response.getHeaders().get("Set-Cookie");
-        if(userCookie == null) {
-            UserCookie newUserCookie = new UserCookie();
-            newUserCookie.setUser(user);
-            newUserCookie.setPlatform(Platforms.BILI.getNumVal());
-            newUserCookie.setData(CookieHandler.setCookie(cookies));
-            newUserCookie.setUpdateTime(Instant.now());
-            userCookieDAO.save(newUserCookie);
-        } else {
-            userCookie.setData(CookieHandler.setCookie(cookies));
-            userCookie.setUpdateTime(Instant.now());
-            userCookieDAO.save(userCookie);
-        }
+
+        userCookieDAO.save(Objects.requireNonNull(CookieHandler.setCookie(cookies, userCookie, user, Platforms.BILI)));
 
         return ResponseCode.SUCCESS;
     }

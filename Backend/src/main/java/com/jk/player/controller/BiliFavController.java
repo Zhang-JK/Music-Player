@@ -34,7 +34,7 @@ public class BiliFavController {
     public BaseResult<List<BiliFavListResponse>> biliFavList(@CookieValue(value = "session", defaultValue = "NULL") String session, @CookieValue(value = "username") String username) {
         User user = loginService.getUser(username);
         if(!biliLoginService.isLogin(user))
-            return new BaseResult<>(ResponseCode.BILI_NOT_LOGIN);
+            return new BaseResult<>(ResponseCode.PLATFORM_NOT_LOGIN);
 
         List<BiliFavListResponse> list = biliFavService.getBiliFavList(user);
         if(list == null) new BaseResult<>(ResponseCode.SERVER_ERROR);
