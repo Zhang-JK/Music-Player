@@ -63,9 +63,66 @@ def bili_fav_list():
     print(bili_fav_list)
 
 
+def netease_login():
+    session = requests.session()
+    load_cookiejar = LWPCookieJar()
+    load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
+    session.cookies = load_cookiejar
+
+    netease_login = session.post(host + '/netease/qrcode', headers=headers).json()
+    print(netease_login)
+    loginurl = netease_login['data']['url']
+    oauthKey = netease_login['data']['oauthKey']
+
+    qr = qrcode.QRCode()
+    qr.add_data(loginurl)
+    img = qr.make_image()
+    img.save('./wyy-login-qrcode.png')
+
+    while 1:
+        qrcodedata = session.post(host + '/netease/qr-check', data={'oauthKey': oauthKey}).json()
+        time.sleep(3)
+        print(qrcodedata['message'])
+        if qrcodedata['code'] == 200:
+            break
+
+
+def netease_login_check():
+    session = requests.session()
+    load_cookiejar = LWPCookieJar()
+    load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
+    session.cookies = load_cookiejar
+
+    netease_login_check = session.post(host + '/netease/login-check', headers=headers).json()
+    print(netease_login_check)
+
+
+def bili_login_check():
+    session = requests.session()
+    load_cookiejar = LWPCookieJar()
+    load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
+    session.cookies = load_cookiejar
+
+    bili_login_check = session.post(host + '/bili/login-check', headers=headers).json()
+    print(bili_login_check)
+
+
+def netease_fav_list():
+    session = requests.session()
+    load_cookiejar = LWPCookieJar()
+    load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
+    session.cookies = load_cookiejar
+
+    netease_fav_list = session.post(host + '/netease/fav-list', headers=headers).json()
+    print(netease_fav_list)
+
 
 if __name__ == '__main__':
     # login()
     # time.sleep(2)
     # bili_login()
-    bili_fav_list()
+    # bili_fav_list()
+    # netease_login()
+    # netease_login_check()
+    # bili_login_check()
+    netease_fav_list()

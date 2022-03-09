@@ -5,7 +5,6 @@ import com.jk.player.dao.UserCookieDAO;
 import com.jk.player.model.User;
 import com.jk.player.model.UserCookie;
 import com.jk.player.result.ResponseCode;
-import com.jk.player.utils.CookieHandler;
 import com.jk.player.utils.Platforms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -19,7 +18,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -78,11 +76,11 @@ public class NeteaseLoginService {
     public boolean isLogin(User user) {
         Map<String, Object> param = new HashMap<>();
         param.put("timestamp", Instant.now().getEpochSecond());
-        ResponseEntity<JSONObject> response = neteaseGetRequestWithCookie("http://localhost:3000/user/account", "?timestamp={timestamp}", param, user);
+        ResponseEntity<JSONObject> response = neteaseRequestWithCookie("http://localhost:3000/user/account", "?timestamp={timestamp}", param, user);
         return !Objects.requireNonNull(response.getBody()).isNull("account");
     }
 
-    public ResponseEntity<JSONObject> neteaseGetRequestWithCookie(String url, String paramList, Map<String, Object> param, User user) {
+    public ResponseEntity<JSONObject> neteaseRequestWithCookie(String url, String paramList, Map<String, Object> param, User user) {
         UserCookie userCookie = userCookieDAO.findByUserAndPlatform(user, Platforms.NETEASE.getNumVal());
         HttpHeaders headers = new HttpHeaders();
         headers.add("cookie", userCookie.getData());
@@ -94,5 +92,10 @@ public class NeteaseLoginService {
             return restTemplate.exchange(url+paramList, HttpMethod.POST, requestEntity, JSONObject.class, param);
         else
             return restTemplate.exchange(url, HttpMethod.POST, requestEntity, JSONObject.class);
+    }
+
+    public Integer getUserId(User user) {
+        ResponseEntity<JSONObject> response = neteaseRequestWithCookie("http://localhost:3000/user/account", "", null, user);
+        return Objects.requireNonNull(response.getBody()).getJSONObject("account").getInt("id");
     }
 }

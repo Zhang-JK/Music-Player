@@ -1,8 +1,6 @@
 package com.jk.player.response;
 
-import java.time.Instant;
-
-public class BiliFavListResponse {
+public class PlatformFavListResponse {
     private String title;
     private int id;
     private int mediaCount;

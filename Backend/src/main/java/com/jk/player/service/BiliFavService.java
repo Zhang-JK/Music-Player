@@ -3,16 +3,13 @@ package com.jk.player.service;
 import cn.hutool.json.JSONObject;
 import com.jk.player.dao.UserCookieDAO;
 import com.jk.player.model.User;
-import com.jk.player.response.BiliFavListResponse;
+import com.jk.player.response.PlatformFavListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -24,7 +21,7 @@ public class BiliFavService {
     @Autowired
     BiliLoginService biliLoginService;
 
-    public List<BiliFavListResponse> getBiliFavList(User user) {
+    public List<PlatformFavListResponse> getBiliFavList(User user) {
         ResponseEntity<JSONObject> info = biliLoginService.biliRequestWithCookie("http://api.bilibili.com/x/web-interface/nav", HttpMethod.GET, null, user);
         Integer mid = Objects.requireNonNull(info.getBody()).getJSONObject("data").getInt("mid");
 
@@ -32,6 +29,6 @@ public class BiliFavService {
         if(Objects.requireNonNull(response.getBody()).isNull("data"))
             return null;
 
-        return response.getBody().getJSONObject("data").getJSONArray("list").toList(BiliFavListResponse.class);
+        return response.getBody().getJSONObject("data").getJSONArray("list").toList(PlatformFavListResponse.class);
     }
 }
