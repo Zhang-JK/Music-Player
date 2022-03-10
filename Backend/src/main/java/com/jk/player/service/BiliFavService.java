@@ -15,6 +15,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.*;
 
 @Service
@@ -51,6 +52,18 @@ public class BiliFavService {
         return response.getBody().getJSONObject("data").getJSONArray("medias");
     }
 
+    public JSONObject getBiliListDetailRequest(User user, BigInteger aid) {
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("aid", aid.toString()));
+
+        String url = "http://api.bilibili.com/x/web-interface/view?" + URLEncodedUtils.format(params, "UTF-8");
+        ResponseEntity<JSONObject> response = biliLoginService.biliRequestWithCookie(url, HttpMethod.GET, null, user);
+        if (Objects.requireNonNull(response.getBody()).isNull("data"))
+            return null;
+
+        return response.getBody().getJSONObject("data");
+    }
+
     public List<PlatformListDetailResponse> getBiliListDetail(User user, Integer listId, Integer ps, Integer pn) {
         JSONArray mediaArray = getBiliListDetailRequest(user, listId, ps, pn);
 
@@ -59,11 +72,22 @@ public class BiliFavService {
 
         mediaArray.replaceAll(item -> {
             JSONObject obj = (JSONObject) item;
-            obj.put("name", obj.getStr("title"));
-            obj.put("creator", obj.getJSONObject("upper").getStr("name"));
-            obj.put("coverUrl", obj.getStr("cover"));
+            obj.set("name", obj.getStr("title"));
+            obj.set("creator", obj.getJSONObject("upper").getStr("name"));
+            obj.set("coverUrl", obj.getStr("cover"));
             return obj;
         });
         return mediaArray.toList(PlatformListDetailResponse.class);
+    }
+
+    public JSONArray getBiliSongList(List<BigInteger> id, User user) {
+        JSONArray songArray = new JSONArray();
+        for (BigInteger i : id) {
+            JSONObject obj = getBiliListDetailRequest(user, i);
+            if (obj == null) continue;
+//                obj = new JSONObject().set("aid", i);
+            songArray.add(obj);
+        }
+        return songArray;
     }
 }

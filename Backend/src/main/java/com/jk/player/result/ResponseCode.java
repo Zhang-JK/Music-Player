@@ -6,6 +6,7 @@ public enum ResponseCode {
 
     // error
     BAD_REQUEST(400, "Request is invalid"),
+    LIMIT_EXCEED_MAX(400, "Limit exceed max"),
     SERVER_ERROR(500, "Server error"),
 
     // login error

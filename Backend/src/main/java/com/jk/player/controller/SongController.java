@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ public class SongController {
     @CrossOrigin
     @PostMapping(value = "/api/song/import")
     @ResponseBody
-    public BaseResult<SongImportResponse> importSong(@CookieValue(value = "session") String session, @CookieValue(value = "username") String username, @RequestParam Integer platform, @RequestParam List<Integer> id) {
+    public BaseResult<SongImportResponse> importSong(@CookieValue(value = "session") String session, @CookieValue(value = "username") String username, @RequestParam Integer platform, @RequestParam List<BigInteger> id) {
         User user = loginService.getUser(username);
         switch (platform) {
             // bili

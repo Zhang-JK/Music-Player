@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +62,7 @@ public class NeteaseFavService {
         return response.getBody().getJSONArray("songs");
     }
 
-    public JSONArray getNeteaseSongList(List<Integer> id, User user) {
+    public JSONArray getNeteaseSongList(List<BigInteger> id, User user) {
         String ids = id.toString().replace("[", "").replace("]", "");
         Map<String, Object> param = new HashMap<>();
         param.put("ids", ids);
@@ -80,8 +81,8 @@ public class NeteaseFavService {
 
         songArray.replaceAll(item -> {
             JSONObject obj = (JSONObject) item;
-            obj.put("creator", obj.getJSONArray("ar").getJSONObject(0).getStr("name"));
-            obj.put("coverUrl", obj.getJSONObject("al").getStr("picUrl"));
+            obj.set("creator", obj.getJSONArray("ar").getJSONObject(0).getStr("name"));
+            obj.set("coverUrl", obj.getJSONObject("al").getStr("picUrl"));
             return obj;
         });
         return songArray.toList(PlatformListDetailResponse.class);

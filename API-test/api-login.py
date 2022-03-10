@@ -68,7 +68,7 @@ def bili_list_detail():
     load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
     session.cookies = load_cookiejar
 
-    detail = session.post(host + '/bili/list-detail', params={'id': 284110317, 'limit': 10}, headers=headers).json()
+    detail = session.post(host + '/bili/list-detail', params={'id': 284110317, 'limit': 20}, headers=headers).json()
     print(detail)
 
 
@@ -154,7 +154,29 @@ def netease_id_import():
     load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
     session.cookies = load_cookiejar
 
-    detail = session.post(host + '/song/import', params={'id': [1839485202, 1350717910], 'platform': 2},
+    detail = session.post(host + '/song/import', params={'id': [183948520200, 1350717910], 'platform': 2},
+                          headers=headers).json()
+    print(detail)
+
+
+def bili_id_import():
+    session = requests.session()
+    load_cookiejar = LWPCookieJar()
+    load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
+    session.cookies = load_cookiejar
+
+    detail = session.post(host + '/song/import', params={'id': [8508035, 9966225000], 'platform': 1},
+                          headers=headers).json()
+    print(detail)
+
+
+def bili_list_import():
+    session = requests.session()
+    load_cookiejar = LWPCookieJar()
+    load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
+    session.cookies = load_cookiejar
+
+    detail = session.post(host + '/song/import-list', params={'listId': 284110317, 'platform': 1},
                           headers=headers).json()
     print(detail)
 
@@ -163,7 +185,7 @@ if __name__ == '__main__':
     # login()
     # time.sleep(2)
     # bili_login()
-    bili_fav_list()
+    # bili_fav_list()
     # netease_login()
     # netease_login_check()
     # bili_login_check()
@@ -173,3 +195,5 @@ if __name__ == '__main__':
     # netease_list_import()
     # netease_id_import()
     bili_list_detail()
+    # bili_id_import()
+    bili_list_import()
