@@ -21,6 +21,7 @@ def get_all_list():
     print(songs)
     print(songs['songs'][3]['name'], songs['songs'][3]['id'])
     song_url = session.get(link + '/song/url', params={'id': songs['songs'][3]['id'], 'timestamp': datetime.now().timestamp()}).json()
+    print(song_url)
     print(song_url['data'][0]['url'])
     # p = vlc.MediaPlayer(song_url['data'][0]['url'])
     # p.play()

@@ -5,6 +5,7 @@ import cn.hutool.json.JSONObject;
 import com.jk.player.model.User;
 import com.jk.player.response.PlatformFavListResponse;
 import com.jk.player.response.PlatformListDetailResponse;
+import com.jk.player.response.PlayerLinkResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -86,5 +87,28 @@ public class NeteaseFavService {
             return obj;
         });
         return songArray.toList(PlatformListDetailResponse.class);
+    }
+
+    public PlayerLinkResponse getNeteaseSongLink(User user, BigInteger id) {
+        Map<String, Object> param = new HashMap<>();
+        String paramList = "?timestamp={t}&id={id}";
+        param.put("t", Instant.now().getEpochSecond());
+        param.put("id", id);
+        ResponseEntity<JSONObject> response = neteaseLoginService.neteaseRequestWithCookie("http://localhost:3000/song/url", paramList, param, user);
+        if (Objects.requireNonNull(response.getBody()).isNull("data"))
+            return null;
+
+        JSONObject obj = response.getBody().getJSONArray("data").getJSONObject(0);
+        PlayerLinkResponse res = new PlayerLinkResponse();
+
+        if(obj.isNull("url")) {
+            res.setStatus(2);
+            res.setMessage("Failed");
+            return res;
+        }
+        res.setLink(obj.getStr("url"));
+        res.setType(obj.getStr("type"));
+        res.setStatus(0);
+        return res;
     }
 }

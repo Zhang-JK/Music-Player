@@ -13,4 +13,19 @@ public enum Platforms {
     public int getNumVal() {
         return numVal;
     }
+
+    static public Platforms getPlatform(int num) {
+        switch (num) {
+            case 0:
+                return LOCAL;
+            case 1:
+                return BILI;
+            case 2:
+                return NETEASE;
+            case 3:
+                return YTB;
+            default:
+                return null;
+        }
+    }
 }

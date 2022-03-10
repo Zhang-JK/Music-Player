@@ -181,6 +181,17 @@ def bili_list_import():
     print(detail)
 
 
+def netease_play():
+    session = requests.session()
+    load_cookiejar = LWPCookieJar()
+    load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
+    session.cookies = load_cookiejar
+
+    player = session.post(host + '/player/link', params={'ids': [241, 250, 257], 'platform': 0},
+                          headers=headers).json()
+    print(player)
+
+
 if __name__ == '__main__':
     # login()
     # time.sleep(2)
@@ -196,4 +207,5 @@ if __name__ == '__main__':
     # netease_id_import()
     # bili_list_detail()
     # bili_id_import()
-    bili_list_import()
+    # bili_list_import()
+    netease_play()
