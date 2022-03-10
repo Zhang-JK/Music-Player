@@ -91,6 +91,11 @@ public class SongService {
                 continue;
             }
 
+            if (song.getName().equals("已失效视频")) {
+                failList.put(song.getSerial(), "Song is deleted");
+                continue;
+            }
+
             String msg = importSong(song);
             if (msg == null) successList.add(song.getSerial());
             else failList.put(song.getSerial(), msg);

@@ -194,6 +194,6 @@ if __name__ == '__main__':
     # time.sleep(2)
     # netease_list_import()
     # netease_id_import()
-    bili_list_detail()
+    # bili_list_detail()
     # bili_id_import()
     bili_list_import()
