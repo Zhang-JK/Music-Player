@@ -75,6 +75,8 @@ public class NeteaseFavService {
 
     public List<PlatformListDetailResponse> getNeteaseListDetail(User user, Integer listId, Integer limit, Integer offset) {
         JSONArray songArray = getNeteaseListDetailRequest(user, listId, limit, offset);
+        if (songArray == null)
+            return null;
 
         songArray.replaceAll(item -> {
             JSONObject obj = (JSONObject) item;

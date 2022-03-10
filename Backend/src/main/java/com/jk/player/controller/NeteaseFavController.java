@@ -47,7 +47,8 @@ public class NeteaseFavController {
         if (!neteaseLoginService.isLogin(user)) return new BaseResult<>(ResponseCode.PLATFORM_NOT_LOGIN);
 
         List<PlatformListDetailResponse> list = neteaseFavService.getNeteaseListDetail(user, id, limit, offset);
-        if (list == null) new BaseResult<>(ResponseCode.SERVER_ERROR);
+        if (list == null)
+            return new BaseResult<>(ResponseCode.SERVER_ERROR);
 
         return new BaseResult<>(ResponseCode.SUCCESS, list);
     }

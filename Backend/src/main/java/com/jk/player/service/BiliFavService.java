@@ -1,17 +1,21 @@
 package com.jk.player.service;
 
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import com.jk.player.dao.UserCookieDAO;
 import com.jk.player.model.Song;
 import com.jk.player.model.User;
 import com.jk.player.response.PlatformFavListResponse;
+import com.jk.player.response.PlatformListDetailResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class BiliFavService {
@@ -33,7 +37,33 @@ public class BiliFavService {
         return response.getBody().getJSONObject("data").getJSONArray("list").toList(PlatformFavListResponse.class);
     }
 
-    public List<Song> getBiliSongList(List<Integer> id, User user) {
-        return null;
+    public JSONArray getBiliListDetailRequest(User user, Integer listId, Integer ps, Integer pn) {
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("media_id", listId.toString()));
+        params.add(new BasicNameValuePair("ps", ps.toString()));
+        if (pn != null) params.add(new BasicNameValuePair("pn", pn.toString()));
+
+        String url = "http://api.bilibili.com/x/v3/fav/resource/list?" + URLEncodedUtils.format(params, "UTF-8");
+        ResponseEntity<JSONObject> response = biliLoginService.biliRequestWithCookie(url, HttpMethod.GET, null, user);
+        if (Objects.requireNonNull(response.getBody()).isNull("data"))
+            return null;
+
+        return response.getBody().getJSONObject("data").getJSONArray("medias");
+    }
+
+    public List<PlatformListDetailResponse> getBiliListDetail(User user, Integer listId, Integer ps, Integer pn) {
+        JSONArray mediaArray = getBiliListDetailRequest(user, listId, ps, pn);
+
+        if (mediaArray == null)
+            return null;
+
+        mediaArray.replaceAll(item -> {
+            JSONObject obj = (JSONObject) item;
+            obj.put("name", obj.getStr("title"));
+            obj.put("creator", obj.getJSONObject("upper").getStr("name"));
+            obj.put("coverUrl", obj.getStr("cover"));
+            return obj;
+        });
+        return mediaArray.toList(PlatformListDetailResponse.class);
     }
 }

@@ -62,6 +62,15 @@ def bili_fav_list():
     bili_fav_list = session.post(host + '/bili/fav-list', headers=headers).json()
     print(bili_fav_list)
 
+def bili_list_detail():
+    session = requests.session()
+    load_cookiejar = LWPCookieJar()
+    load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
+    session.cookies = load_cookiejar
+
+    detail = session.post(host + '/bili/list-detail', params={'id': 284110317, 'limit': 10}, headers=headers).json()
+    print(detail)
+
 
 def netease_login():
     session = requests.session()
@@ -123,7 +132,30 @@ def netease_list_detail():
     load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
     session.cookies = load_cookiejar
 
-    detail = session.post(host + '/netease/list-detail', params={'id': 26460971, 'offset': 1, 'limit': 10}, headers=headers).json()
+    detail = session.post(host + '/netease/list-detail', params={'id': 26460971, 'offset': 1, 'limit': 10},
+                          headers=headers).json()
+    print(detail)
+
+
+def netease_list_import():
+    session = requests.session()
+    load_cookiejar = LWPCookieJar()
+    load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
+    session.cookies = load_cookiejar
+
+    detail = session.post(host + '/song/import-list', params={'listId': 26460971, 'platform': 2},
+                          headers=headers).json()
+    print(detail)
+
+
+def netease_id_import():
+    session = requests.session()
+    load_cookiejar = LWPCookieJar()
+    load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
+    session.cookies = load_cookiejar
+
+    detail = session.post(host + '/song/import', params={'id': [1839485202, 1350717910], 'platform': 2},
+                          headers=headers).json()
     print(detail)
 
 
@@ -131,9 +163,13 @@ if __name__ == '__main__':
     # login()
     # time.sleep(2)
     # bili_login()
-    # bili_fav_list()
+    bili_fav_list()
     # netease_login()
     # netease_login_check()
     # bili_login_check()
     # netease_fav_list()
-    netease_list_detail()
+    # netease_list_detail()
+    # time.sleep(2)
+    # netease_list_import()
+    # netease_id_import()
+    bili_list_detail()
