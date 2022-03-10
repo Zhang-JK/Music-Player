@@ -187,7 +187,7 @@ def netease_play():
     load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
     session.cookies = load_cookiejar
 
-    player = session.post(host + '/player/link', params={'ids': [241, 250, 257], 'platform': 0},
+    player = session.post(host + '/player/link', params={'ids': [936622500, 549459490], 'platform': 1},
                           headers=headers).json()
     print(player)
 

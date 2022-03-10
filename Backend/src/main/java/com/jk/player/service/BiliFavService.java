@@ -6,6 +6,7 @@ import com.jk.player.dao.UserCookieDAO;
 import com.jk.player.model.User;
 import com.jk.player.response.PlatformFavListResponse;
 import com.jk.player.response.PlatformListDetailResponse;
+import com.jk.player.response.PlayerLinkResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -51,7 +53,7 @@ public class BiliFavService {
         return response.getBody().getJSONObject("data").getJSONArray("medias");
     }
 
-    public JSONObject getBiliListDetailRequest(User user, BigInteger aid) {
+    public JSONObject getBiliVideoDetailRequest(User user, BigInteger aid) {
         List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("aid", aid.toString()));
 
@@ -82,11 +84,40 @@ public class BiliFavService {
     public JSONArray getBiliSongList(List<BigInteger> id, User user) {
         JSONArray songArray = new JSONArray();
         for (BigInteger i : id) {
-            JSONObject obj = getBiliListDetailRequest(user, i);
+            JSONObject obj = getBiliVideoDetailRequest(user, i);
             if (obj == null) continue;
 //                obj = new JSONObject().set("aid", i);
             songArray.add(obj);
         }
         return songArray;
+    }
+
+    public PlayerLinkResponse getBiliSongLink(User user, BigInteger aid) {
+        PlayerLinkResponse res = new PlayerLinkResponse();
+        res.setStatus(2);
+        res.setMessage("Failed");
+
+        JSONObject obj = getBiliVideoDetailRequest(user, aid);
+        if (obj == null) return res;
+        Long cid = obj.getLong("cid");
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("avid", aid.toString()));
+        params.add(new BasicNameValuePair("cid", cid.toString()));
+        params.add(new BasicNameValuePair("fnval", "16"));
+
+        String url = "http://api.bilibili.com/x/player/playurl?" + URLEncodedUtils.format(params, "UTF-8");
+        ResponseEntity<JSONObject> response = biliLoginService.biliRequestWithCookie(url, HttpMethod.GET, null, user);
+
+        if (Objects.requireNonNull(response.getBody()).isNull("data"))
+            return res;
+
+        res.setLink(response.getBody().getJSONObject("data").getJSONObject("dash").getJSONArray("audio").getJSONObject(0).getStr("baseUrl"));
+        res.setType(response.getBody().getJSONObject("data").getJSONObject("dash").getJSONArray("audio").getJSONObject(0).getStr("codecs"));
+        res.setStatus(0);
+        res.setMessage("");
+        Instant expire = Instant.now().plusSeconds(60*60*2);
+        res.setExpires(expire.getEpochSecond());
+        return res;
     }
 }

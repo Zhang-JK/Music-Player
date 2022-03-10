@@ -10,7 +10,7 @@ public class PlayerLinkResponse {
     String link;
     // mp3, flac, mp4
     String type;
-    Instant expires;
+    Long expires;
     BigInteger srcId;
 
     public Integer getStatus() {
@@ -45,11 +45,11 @@ public class PlayerLinkResponse {
         this.type = type;
     }
 
-    public Instant getExpires() {
+    public Long getExpires() {
         return expires;
     }
 
-    public void setExpires(Instant expires) {
+    public void setExpires(Long expires) {
         this.expires = expires;
     }
 

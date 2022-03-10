@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.Instant;
 import java.util.Objects;
 
 @Service
@@ -19,6 +20,9 @@ public class PlayerService {
 
     @Autowired
     private NeteaseFavService neteaseFavService;
+
+    @Autowired
+    private BiliFavService biliFavService;
 
     public PlayerLinkResponse getPlayerLinkById(Platforms platform, BigInteger id, User user) {
         if (platform == Platforms.LOCAL) {
@@ -36,7 +40,7 @@ public class PlayerService {
 
         switch (Objects.requireNonNull(platform)) {
             case BILI:
-                return null;
+                return biliFavService.getBiliSongLink(user, id);
             case NETEASE:
                 return neteaseFavService.getNeteaseSongLink(user, id);
         }
