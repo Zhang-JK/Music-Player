@@ -12,9 +12,13 @@ public class List {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Column(name = "name", nullable = false, length = 256)
+    private String name;
 
     @Column(name = "cover", length = 512)
     private String cover;
@@ -52,6 +56,14 @@ public class List {
         this.cover = cover;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public User getUser() {
         return user;
     }
@@ -67,5 +79,4 @@ public class List {
     public void setId(Integer id) {
         this.id = id;
     }
-
 }
