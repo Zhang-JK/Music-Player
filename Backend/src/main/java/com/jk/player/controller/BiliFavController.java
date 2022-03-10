@@ -31,11 +31,11 @@ public class BiliFavController {
     @ResponseBody
     public BaseResult<List<PlatformFavListResponse>> biliFavList(@CookieValue(value = "session", defaultValue = "NULL") String session, @CookieValue(value = "username") String username) {
         User user = loginService.getUser(username);
-        if(!biliLoginService.isLogin(user))
+        if (!biliLoginService.isLogin(user))
             return new BaseResult<>(ResponseCode.PLATFORM_NOT_LOGIN);
 
         List<PlatformFavListResponse> list = biliFavService.getBiliFavList(user);
-        if(list == null) new BaseResult<>(ResponseCode.SERVER_ERROR);
+        if (list == null) new BaseResult<>(ResponseCode.SERVER_ERROR);
 
         return new BaseResult<>(ResponseCode.SUCCESS, list);
     }
@@ -45,7 +45,7 @@ public class BiliFavController {
     @ResponseBody
     public BaseResult<List<PlatformListDetailResponse>> biliListDetail(@CookieValue(value = "session") String session, @CookieValue(value = "username") String username, @RequestParam Integer id, @RequestParam Integer limit, @RequestParam(required = false) Integer offset) {
         User user = loginService.getUser(username);
-        if(limit > 20) {
+        if (limit > 20) {
             return new BaseResult<>(ResponseCode.LIMIT_EXCEED_MAX);
         }
 

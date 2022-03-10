@@ -2,13 +2,15 @@ package com.jk.player.controller;
 
 import cn.hutool.crypto.SecureUtil;
 import com.jk.player.model.User;
-import com.jk.player.result.ResponseCode;
 import com.jk.player.result.BaseResult;
+import com.jk.player.result.ResponseCode;
 import com.jk.player.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;

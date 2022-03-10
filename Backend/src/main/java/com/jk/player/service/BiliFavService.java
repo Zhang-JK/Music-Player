@@ -3,7 +3,6 @@ package com.jk.player.service;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import com.jk.player.dao.UserCookieDAO;
-import com.jk.player.model.Song;
 import com.jk.player.model.User;
 import com.jk.player.response.PlatformFavListResponse;
 import com.jk.player.response.PlatformListDetailResponse;

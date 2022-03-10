@@ -1,22 +1,17 @@
 package com.jk.player.controller;
 
-import com.jk.player.model.Song;
 import com.jk.player.model.User;
-import com.jk.player.response.PlatformFavListResponse;
 import com.jk.player.response.SongImportResponse;
 import com.jk.player.result.BaseResult;
 import com.jk.player.result.ResponseCode;
-import com.jk.player.service.*;
-import com.jk.player.utils.Platforms;
+import com.jk.player.service.LoginService;
+import com.jk.player.service.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class SongController {
