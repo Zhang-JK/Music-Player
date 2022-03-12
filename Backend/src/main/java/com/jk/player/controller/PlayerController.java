@@ -28,9 +28,8 @@ public class PlayerController {
     @PostMapping(value = "/api/player/link")
     @ResponseBody
     public BaseResult<List<PlayerLinkResponse>> getPlayerLink(@CookieValue(value = "session") String session, @CookieValue(value = "username") String username, @RequestParam Integer platform, @RequestParam List<BigInteger> ids) {
-        User user = loginService.getUser(username);
-        if (user == null)
-            return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        User user = loginService.verifyLoginUser(session, username);
+        if(user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
 
         List<PlayerLinkResponse> list = new ArrayList<>();
         for (BigInteger id : ids) {

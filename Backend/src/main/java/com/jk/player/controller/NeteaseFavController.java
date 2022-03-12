@@ -30,7 +30,8 @@ public class NeteaseFavController {
     @PostMapping(value = "/api/netease/fav-list")
     @ResponseBody
     public BaseResult<List<PlatformFavListResponse>> neteaseFavList(@CookieValue(value = "session", defaultValue = "NULL") String session, @CookieValue(value = "username") String username) {
-        User user = loginService.getUser(username);
+        User user = loginService.verifyLoginUser(session, username);
+        if(user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
         if (!neteaseLoginService.isLogin(user)) return new BaseResult<>(ResponseCode.PLATFORM_NOT_LOGIN);
 
         List<PlatformFavListResponse> list = neteaseFavService.getNeteaseFavList(user);
@@ -43,7 +44,8 @@ public class NeteaseFavController {
     @PostMapping(value = "/api/netease/list-detail")
     @ResponseBody
     public BaseResult<List<PlatformListDetailResponse>> neteaseListDetail(@CookieValue(value = "session") String session, @CookieValue(value = "username") String username, @RequestParam Integer id, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) {
-        User user = loginService.getUser(username);
+        User user = loginService.verifyLoginUser(session, username);
+        if(user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
         if (!neteaseLoginService.isLogin(user)) return new BaseResult<>(ResponseCode.PLATFORM_NOT_LOGIN);
 
         List<PlatformListDetailResponse> list = neteaseFavService.getNeteaseListDetail(user, id, limit, offset);

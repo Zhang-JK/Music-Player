@@ -26,7 +26,8 @@ public class SongController {
     @PostMapping(value = "/api/song/import")
     @ResponseBody
     public BaseResult<SongImportResponse> importSong(@CookieValue(value = "session") String session, @CookieValue(value = "username") String username, @RequestParam Integer platform, @RequestParam List<BigInteger> id) {
-        User user = loginService.getUser(username);
+        User user = loginService.verifyLoginUser(session, username);
+        if(user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
         switch (platform) {
             // bili
             case 1:
@@ -43,7 +44,8 @@ public class SongController {
     @PostMapping(value = "/api/song/import-list")
     @ResponseBody
     public BaseResult<SongImportResponse> importSongList(@CookieValue(value = "session") String session, @CookieValue(value = "username") String username, @RequestParam Integer platform, @RequestParam Integer listId) {
-        User user = loginService.getUser(username);
+        User user = loginService.verifyLoginUser(session, username);
+        if(user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
         switch (platform) {
             // bili
             case 1:

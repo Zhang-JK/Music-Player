@@ -31,4 +31,18 @@ public class LoginService {
         userSessionDAO.save(userSession);
         return session;
     }
+
+    public User verifyLoginUser(String session, String username) {
+        UserSession userSession = userSessionDAO.findBySession(session);
+        if (userSession == null)
+            return null;
+        if (userSession.getExpireStamp().isBefore(Instant.now())) {
+            userSessionDAO.delete(userSession);
+            return null;
+        }
+        if (!userSession.getUser().getUsername().equals(username))
+            return null;
+
+        return userSession.getUser();
+    }
 }
