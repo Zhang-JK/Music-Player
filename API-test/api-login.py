@@ -6,7 +6,7 @@ from http.cookiejar import LWPCookieJar
 import qrcode
 import requests
 
-host = 'http://127.0.0.1:8080/api'
+host = 'http://laojk.club:8080/api'
 headers = {
     'Accept': '*/*',
     'Content-Type': 'application/json',
@@ -245,6 +245,6 @@ if __name__ == '__main__':
     # bili_list_detail()
     # bili_id_import()
     # bili_list_import()
-    # netease_play()
+    netease_play()
     # list_test()
-    search_song()
+    # search_song()
