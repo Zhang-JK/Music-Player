@@ -62,6 +62,7 @@ def bili_fav_list():
     bili_fav_list = session.post(host + '/bili/fav-list', headers=headers).json()
     print(bili_fav_list)
 
+
 def bili_list_detail():
     session = requests.session()
     load_cookiejar = LWPCookieJar()
@@ -165,7 +166,7 @@ def bili_id_import():
     load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
     session.cookies = load_cookiejar
 
-    detail = session.post(host + '/song/import', params={'id': [8508035, 9966225000], 'platform': 1},
+    detail = session.post(host + '/song/import', params={'id': [8508035, 680885174], 'platform': 1},
                           headers=headers).json()
     print(detail)
 
@@ -192,6 +193,42 @@ def netease_play():
     print(player)
 
 
+def list_test():
+    session = requests.session()
+    load_cookiejar = LWPCookieJar()
+    load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
+    session.cookies = load_cookiejar
+
+    create = session.post(host + '/list/create', params={'name': 'test'}, headers=headers).json()
+    print(create)
+    list = session.post(host + '/list/user-lists', headers=headers).json()
+    print(list)
+    print(list['data'][0]['id'])
+    add = session.post(host + '/list/add-songs', params={'id': list['data'][0]['id'], 'songIds': [1, 5, 10]},
+                       headers=headers).json()
+    print(add)
+    delete = session.post(host + '/list/delete-songs', params={'id': list['data'][0]['id'], 'songIds': [1, 5]},
+                          headers=headers).json()
+    print(delete)
+    get = session.post(host + '/list/get-songs', params={'id': list['data'][0]['id']},
+                       headers=headers).json()
+    print(get)
+    # delete_list = session.post(host + '/list/delete', params={'id': list['data'][0]['id']},
+    #                            headers=headers).json()
+    # print(delete_list)
+
+
+def search_song():
+    session = requests.session()
+    load_cookiejar = LWPCookieJar()
+    load_cookiejar.load('cookies.cookie', ignore_discard=True, ignore_expires=True)
+    session.cookies = load_cookiejar
+
+    search = session.post(host + '/song/search', params={'artist': '泠鸢'},
+                          headers=headers).json()
+    print(search)
+
+
 if __name__ == '__main__':
     # login()
     # time.sleep(2)
@@ -208,4 +245,6 @@ if __name__ == '__main__':
     # bili_list_detail()
     # bili_id_import()
     # bili_list_import()
-    netease_play()
+    # netease_play()
+    # list_test()
+    search_song()

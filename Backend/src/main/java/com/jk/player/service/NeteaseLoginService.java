@@ -4,7 +4,7 @@ import cn.hutool.json.JSONObject;
 import com.jk.player.dao.UserCookieDAO;
 import com.jk.player.model.User;
 import com.jk.player.model.UserCookie;
-import com.jk.player.result.ResponseCode;
+import com.jk.player.response.ResponseCode;
 import com.jk.player.utils.Platforms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;

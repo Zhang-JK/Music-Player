@@ -25,8 +25,10 @@ public class PlayerService {
 
     public PlayerLinkResponse getPlayerLinkById(Platforms platform, BigInteger id, User user) {
         if (platform == Platforms.LOCAL) {
-            Song song = songDAO.findById(id.longValue());
-            if (song == null) {
+            Song song;
+            try {
+                song = songDAO.getById(id.longValue());
+            } catch (Exception e) {
                 PlayerLinkResponse response = new PlayerLinkResponse();
                 response.setMessage("ID not found");
                 response.setStatus(1);

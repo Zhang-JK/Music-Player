@@ -2,8 +2,8 @@ package com.jk.player.controller;
 
 import com.jk.player.model.User;
 import com.jk.player.response.PlayerLinkResponse;
-import com.jk.player.result.BaseResult;
-import com.jk.player.result.ResponseCode;
+import com.jk.player.response.BaseResult;
+import com.jk.player.response.ResponseCode;
 import com.jk.player.service.LoginService;
 import com.jk.player.service.PlayerService;
 import com.jk.player.utils.Platforms;

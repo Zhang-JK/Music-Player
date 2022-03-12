@@ -33,6 +33,9 @@ public class LoginService {
     }
 
     public User verifyLoginUser(String session, String username) {
+        if (session == null || username == null) {
+            return null;
+        }
         UserSession userSession = userSessionDAO.findBySession(session);
         if (userSession == null)
             return null;
