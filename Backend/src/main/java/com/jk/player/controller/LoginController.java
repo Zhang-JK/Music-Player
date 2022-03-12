@@ -33,7 +33,7 @@ public class LoginController {
         if (!user.getPassword().equalsIgnoreCase(SecureUtil.md5(requestUser.getPassword() + user.getSalt())))
             return new BaseResult<>(ResponseCode.LOGIN_WRONG_PASSWORD);
 
-        String session = loginService.generateSession(user.getId());
+        String session = loginService.generateSession(user);
         Cookie sessionCookie = new Cookie("session", session);
         sessionCookie.setMaxAge(60 * 60 * 24 * 30);
         sessionCookie.setPath("/");
