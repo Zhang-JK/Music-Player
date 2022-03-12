@@ -1,4 +1,4 @@
-package com.jk.player.result;
+package com.jk.player.response;
 
 public enum ResponseCode {
     // success
@@ -21,7 +21,11 @@ public enum ResponseCode {
     PLATFORM_LOGIN_URL_EXPIRED(1404, "Platform qrcode url expired"),
 
     // import song error
-    IMPORT_ERROR(1201, "Import song error");
+    IMPORT_ERROR(1201, "Import song error"),
+
+    // list related error
+    LIST_DATABASE_FAIL(1301, "List process fail"),
+    LIST_NOT_ACCESSIBLE(1302, "List not accessible");
 
     private final int code;
     private final String message;

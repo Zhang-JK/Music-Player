@@ -1,4 +1,4 @@
-package com.jk.player.result;
+package com.jk.player.response;
 
 public class BaseResult<T> {
     // result code

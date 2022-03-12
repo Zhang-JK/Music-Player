@@ -6,7 +6,7 @@ import com.jk.player.dao.SongDAO;
 import com.jk.player.model.Song;
 import com.jk.player.model.User;
 import com.jk.player.response.SongImportResponse;
-import com.jk.player.result.BaseResult;
+import com.jk.player.response.BaseResult;
 import com.jk.player.utils.Platforms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.jk.player.result.ResponseCode.*;
+import static com.jk.player.response.ResponseCode.*;
 
 @Service
 public class SongService {
@@ -144,5 +144,9 @@ public class SongService {
         }
 
         return importSongList(songArray, user, Platforms.NETEASE);
+    }
+
+    public List<Song> searchSong(Integer platform, String serial, String name, String artist) {
+        return songDAO.searchForSongs(platform, serial, name, artist);
     }
 }

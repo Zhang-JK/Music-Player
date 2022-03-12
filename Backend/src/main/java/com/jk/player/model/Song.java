@@ -30,20 +30,6 @@ public class Song {
     @Column(name = "serial", length = 512)
     private String serial;
 
-    @ManyToMany
-    @JoinTable(name = "list_item",
-            joinColumns = @JoinColumn(name = "song_id"),
-            inverseJoinColumns = @JoinColumn(name = "list_id"))
-    private Set<List> lists = new LinkedHashSet<>();
-
-    public Set<List> getLists() {
-        return lists;
-    }
-
-    public void setLists(Set<List> lists) {
-        this.lists = lists;
-    }
-
     public String getSerial() {
         return serial;
     }
