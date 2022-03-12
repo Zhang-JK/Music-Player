@@ -8,7 +8,10 @@ import com.jk.player.response.ResponseCode;
 import com.jk.player.utils.CookieHandler;
 import com.jk.player.utils.Platforms;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -23,7 +26,7 @@ public class BiliLoginService {
     @Autowired
     UserCookieDAO userCookieDAO;
 
-    RestTemplate restTemplate = new RestTemplate();
+    final RestTemplate restTemplate = new RestTemplate();
 
     public JSONObject getBiliLoginUrl() {
         return restTemplate.getForObject("https://passport.bilibili.com/qrcode/getLoginUrl", JSONObject.class);
@@ -36,7 +39,7 @@ public class BiliLoginService {
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(request, headers);
 
         ResponseEntity<JSONObject> response = restTemplate.exchange("https://passport.bilibili.com/qrcode/getLoginInfo", HttpMethod.POST, requestEntity, JSONObject.class);
-        if(!Objects.requireNonNull(response.getBody()).getBool("status")) {
+        if (!Objects.requireNonNull(response.getBody()).getBool("status")) {
             switch (response.getBody().getInt("data")) {
                 case -4:
                     return ResponseCode.PLATFORM_LOGIN_NOT_SCAN;

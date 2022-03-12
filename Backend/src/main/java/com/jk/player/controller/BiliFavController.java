@@ -1,9 +1,9 @@
 package com.jk.player.controller;
 
 import com.jk.player.model.User;
+import com.jk.player.response.BaseResult;
 import com.jk.player.response.PlatformFavListResponse;
 import com.jk.player.response.PlatformListDetailResponse;
-import com.jk.player.response.BaseResult;
 import com.jk.player.response.ResponseCode;
 import com.jk.player.service.BiliFavService;
 import com.jk.player.service.BiliLoginService;
@@ -31,7 +31,7 @@ public class BiliFavController {
     @ResponseBody
     public BaseResult<List<PlatformFavListResponse>> biliFavList(@CookieValue(value = "session") String session, @CookieValue(value = "username") String username) {
         User user = loginService.verifyLoginUser(session, username);
-        if(user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        if (user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
         if (!biliLoginService.isLogin(user))
             return new BaseResult<>(ResponseCode.PLATFORM_NOT_LOGIN);
 
@@ -46,7 +46,7 @@ public class BiliFavController {
     @ResponseBody
     public BaseResult<List<PlatformListDetailResponse>> biliListDetail(@CookieValue(value = "session") String session, @CookieValue(value = "username") String username, @RequestParam Integer id, @RequestParam Integer limit, @RequestParam(required = false) Integer offset) {
         User user = loginService.verifyLoginUser(session, username);
-        if(user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        if (user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
         if (limit > 20) {
             return new BaseResult<>(ResponseCode.LIMIT_EXCEED_MAX);
         }

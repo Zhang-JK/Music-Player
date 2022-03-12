@@ -2,8 +2,8 @@ package com.jk.player.controller;
 
 import cn.hutool.json.JSONObject;
 import com.jk.player.model.User;
-import com.jk.player.response.PlatformLoginResponse;
 import com.jk.player.response.BaseResult;
+import com.jk.player.response.PlatformLoginResponse;
 import com.jk.player.response.ResponseCode;
 import com.jk.player.service.BiliLoginService;
 import com.jk.player.service.LoginService;
@@ -25,7 +25,7 @@ public class BiliLoginController {
     @ResponseBody
     public BaseResult<PlatformLoginResponse> loginQrcode(@CookieValue(value = "session") String session, @CookieValue(value = "username") String username) {
         User user = loginService.verifyLoginUser(session, username);
-        if(user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        if (user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
         JSONObject data = biliLoginService.getBiliLoginUrl();
         PlatformLoginResponse response = new PlatformLoginResponse();
         response.setUrl(data.getJSONObject("data").getStr("url"));
@@ -38,7 +38,7 @@ public class BiliLoginController {
     @ResponseBody
     public BaseResult<String> loginQrcodeCheck(@CookieValue(value = "session") String session, @CookieValue(value = "username") String username, @RequestParam(value = "oauthKey") String oauthKey) {
         User user = loginService.verifyLoginUser(session, username);
-        if(user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        if (user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
         return new BaseResult<>(biliLoginService.checkBiliLogin(oauthKey, loginService.getUser(username)));
     }
 
@@ -47,7 +47,7 @@ public class BiliLoginController {
     @ResponseBody
     public BaseResult<String> loginCheck(@CookieValue(value = "session") String session, @CookieValue(value = "username") String username) {
         User user = loginService.verifyLoginUser(session, username);
-        if(user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
-        return new BaseResult<>(biliLoginService.isLogin(loginService.getUser(username))?ResponseCode.SUCCESS:ResponseCode.PLATFORM_NOT_LOGIN);
+        if (user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        return new BaseResult<>(biliLoginService.isLogin(loginService.getUser(username)) ? ResponseCode.SUCCESS : ResponseCode.PLATFORM_NOT_LOGIN);
     }
 }

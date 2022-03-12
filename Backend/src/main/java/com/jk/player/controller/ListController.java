@@ -31,7 +31,7 @@ public class ListController {
             return new BaseResult<>(ResponseCode.NOT_LOGIN, "Not login");
 
         String res = listService.createList(name, cover, user);
-        return new BaseResult<>(res==null?ResponseCode.SUCCESS:ResponseCode.LIST_DATABASE_FAIL ,res);
+        return new BaseResult<>(res == null ? ResponseCode.SUCCESS : ResponseCode.LIST_DATABASE_FAIL, res);
     }
 
     @CrossOrigin
@@ -45,7 +45,7 @@ public class ListController {
             return new BaseResult<>(ResponseCode.LIST_NOT_ACCESSIBLE, "Not your list");
 
         String res = listService.deleteList(id);
-        return new BaseResult<>(res==null?ResponseCode.SUCCESS:ResponseCode.LIST_DATABASE_FAIL ,res);
+        return new BaseResult<>(res == null ? ResponseCode.SUCCESS : ResponseCode.LIST_DATABASE_FAIL, res);
     }
 
     @CrossOrigin
@@ -71,7 +71,7 @@ public class ListController {
             return new BaseResult<>(ResponseCode.LIST_NOT_ACCESSIBLE);
 
         List<SongResponse> songs = listService.getSongsInList(id);
-        return new BaseResult<>(songs==null?ResponseCode.LIST_DATABASE_FAIL:ResponseCode.SUCCESS, songs);
+        return new BaseResult<>(songs == null ? ResponseCode.LIST_DATABASE_FAIL : ResponseCode.SUCCESS, songs);
     }
 
     @CrossOrigin
@@ -85,7 +85,7 @@ public class ListController {
             return new BaseResult<>(ResponseCode.LIST_NOT_ACCESSIBLE, "Not your list");
 
         String res = listService.addSongToList(id, songIds);
-        return new BaseResult<>(res==null?ResponseCode.SUCCESS:ResponseCode.LIST_DATABASE_FAIL, res);
+        return new BaseResult<>(res == null ? ResponseCode.SUCCESS : ResponseCode.LIST_DATABASE_FAIL, res);
     }
 
     @CrossOrigin
@@ -99,6 +99,6 @@ public class ListController {
             return new BaseResult<>(ResponseCode.LIST_NOT_ACCESSIBLE, "Not your list");
 
         String res = listService.deleteSongFromList(id, songIds);
-        return new BaseResult<>(res==null?ResponseCode.SUCCESS:ResponseCode.LIST_DATABASE_FAIL, res);
+        return new BaseResult<>(res == null ? ResponseCode.SUCCESS : ResponseCode.LIST_DATABASE_FAIL, res);
     }
 }

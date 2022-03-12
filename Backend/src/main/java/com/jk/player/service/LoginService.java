@@ -1,9 +1,9 @@
 package com.jk.player.service;
 
 import cn.hutool.core.util.IdUtil;
+import com.jk.player.dao.UserDAO;
 import com.jk.player.dao.UserSessionDAO;
 import com.jk.player.model.User;
-import com.jk.player.dao.UserDAO;
 import com.jk.player.model.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

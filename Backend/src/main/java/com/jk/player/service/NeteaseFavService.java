@@ -101,7 +101,7 @@ public class NeteaseFavService {
         JSONObject obj = response.getBody().getJSONArray("data").getJSONObject(0);
         PlayerLinkResponse res = new PlayerLinkResponse();
 
-        if(obj.isNull("url")) {
+        if (obj.isNull("url")) {
             res.setStatus(2);
             res.setMessage("Failed");
             return res;

@@ -37,7 +37,7 @@ public class ListService {
         list.setCover(cover);
         try {
             listDAO.save(list);
-        }catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
         return null;
@@ -46,7 +46,7 @@ public class ListService {
     public String deleteList(int id) {
         try {
             listDAO.deleteById(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
         return null;
@@ -77,7 +77,7 @@ public class ListService {
         Set<Song> songs = getSongs(listId);
         try {
             songs.addAll(songDAO.findAllById(songId));
-        }catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
 
@@ -85,7 +85,7 @@ public class ListService {
         list.setSongs(songs);
         try {
             listDAO.saveAndFlush(list);
-        }catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
         return null;
@@ -95,7 +95,7 @@ public class ListService {
         Set<Song> songs = getSongs(listId);
         try {
             songDAO.findAllById(songId).forEach(songs::remove);
-        }catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
 
@@ -103,7 +103,7 @@ public class ListService {
         list.setSongs(songs);
         try {
             listDAO.saveAndFlush(list);
-        }catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
         return null;

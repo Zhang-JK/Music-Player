@@ -10,8 +10,8 @@ public class CookieHandler {
     public static String setCookie(List<String> cookie) {
         if (cookie != null) {
             StringBuilder sb = new StringBuilder();
-            for(String s : cookie) {
-                sb.append(s, 0, s.indexOf(";")+1);
+            for (String s : cookie) {
+                sb.append(s, 0, s.indexOf(";") + 1);
             }
             return sb.toString();
         }
@@ -20,7 +20,7 @@ public class CookieHandler {
 
     public static UserCookie setCookie(List<String> cookie, UserCookie userCookie, User user, Platforms platform) {
 //        String data = platform==Platforms.NETEASE ? cookie.toString().replace("[", "").replace("]", "") : setCookie(cookie);
-        if(userCookie == null) {
+        if (userCookie == null) {
             UserCookie newUserCookie = new UserCookie();
             newUserCookie.setUser(user);
             newUserCookie.setPlatform(platform.getNumVal());

@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BiliFavService {
@@ -32,8 +34,8 @@ public class BiliFavService {
         ResponseEntity<JSONObject> info = biliLoginService.biliRequestWithCookie("http://api.bilibili.com/x/web-interface/nav", HttpMethod.GET, null, user);
         Integer mid = Objects.requireNonNull(info.getBody()).getJSONObject("data").getInt("mid");
 
-        ResponseEntity<JSONObject> response = biliLoginService.biliRequestWithCookie("http://api.bilibili.com/x/v3/fav/folder/created/list-all"+"?up_mid="+mid.toString(), HttpMethod.GET, null, user);
-        if(Objects.requireNonNull(response.getBody()).isNull("data"))
+        ResponseEntity<JSONObject> response = biliLoginService.biliRequestWithCookie("http://api.bilibili.com/x/v3/fav/folder/created/list-all" + "?up_mid=" + mid.toString(), HttpMethod.GET, null, user);
+        if (Objects.requireNonNull(response.getBody()).isNull("data"))
             return null;
 
         return response.getBody().getJSONObject("data").getJSONArray("list").toList(PlatformFavListResponse.class);
@@ -116,7 +118,7 @@ public class BiliFavService {
         res.setType(response.getBody().getJSONObject("data").getJSONObject("dash").getJSONArray("audio").getJSONObject(0).getStr("codecs"));
         res.setStatus(0);
         res.setMessage("");
-        Instant expire = Instant.now().plusSeconds(60*60*2);
+        Instant expire = Instant.now().plusSeconds(60 * 60 * 2);
         res.setExpires(expire.getEpochSecond());
         return res;
     }

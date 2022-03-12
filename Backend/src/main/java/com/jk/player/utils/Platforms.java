@@ -1,7 +1,7 @@
 package com.jk.player.utils;
 
 public enum Platforms {
-    //0 for local, 1 for netease, 2 for bili, 3 for youtube
+    //0 for local, 1 for netease, 2 for bili, 3 for YouTube
     LOCAL(0), BILI(1), NETEASE(2), YTB(3);
 
     private final int numVal;

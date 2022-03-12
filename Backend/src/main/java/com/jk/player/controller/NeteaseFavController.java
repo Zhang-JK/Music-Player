@@ -1,9 +1,9 @@
 package com.jk.player.controller;
 
 import com.jk.player.model.User;
+import com.jk.player.response.BaseResult;
 import com.jk.player.response.PlatformFavListResponse;
 import com.jk.player.response.PlatformListDetailResponse;
-import com.jk.player.response.BaseResult;
 import com.jk.player.response.ResponseCode;
 import com.jk.player.service.LoginService;
 import com.jk.player.service.NeteaseFavService;
@@ -31,7 +31,7 @@ public class NeteaseFavController {
     @ResponseBody
     public BaseResult<List<PlatformFavListResponse>> neteaseFavList(@CookieValue(value = "session", defaultValue = "NULL") String session, @CookieValue(value = "username") String username) {
         User user = loginService.verifyLoginUser(session, username);
-        if(user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        if (user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
         if (!neteaseLoginService.isLogin(user)) return new BaseResult<>(ResponseCode.PLATFORM_NOT_LOGIN);
 
         List<PlatformFavListResponse> list = neteaseFavService.getNeteaseFavList(user);
@@ -45,7 +45,7 @@ public class NeteaseFavController {
     @ResponseBody
     public BaseResult<List<PlatformListDetailResponse>> neteaseListDetail(@CookieValue(value = "session") String session, @CookieValue(value = "username") String username, @RequestParam Integer id, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) {
         User user = loginService.verifyLoginUser(session, username);
-        if(user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        if (user == null) return new BaseResult<>(ResponseCode.NOT_LOGIN);
         if (!neteaseLoginService.isLogin(user)) return new BaseResult<>(ResponseCode.PLATFORM_NOT_LOGIN);
 
         List<PlatformListDetailResponse> list = neteaseFavService.getNeteaseListDetail(user, id, limit, offset);

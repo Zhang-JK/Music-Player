@@ -26,11 +26,11 @@ public class NeteaseLoginService {
     @Autowired
     UserCookieDAO userCookieDAO;
 
-    RestTemplate restTemplate = new RestTemplate();
+    final RestTemplate restTemplate = new RestTemplate();
 
     public JSONObject getNeteaseLoginUrl() {
         Instant instant = Instant.now();
-        return restTemplate.getForObject("http://localhost:3000/login/qr/key?timestamp="+instant.toString(), JSONObject.class);
+        return restTemplate.getForObject("http://localhost:3000/login/qr/key?timestamp=" + instant.toString(), JSONObject.class);
     }
 
     public ResponseCode checkNeteaseLogin(String oauthKey, User user) {
@@ -57,7 +57,7 @@ public class NeteaseLoginService {
         UserCookie userCookie = userCookieDAO.findByUserAndPlatform(user, Platforms.NETEASE.getNumVal());
         String cookies = response.getBody().getStr("cookie");
 
-        if(userCookie == null) {
+        if (userCookie == null) {
             UserCookie newUserCookie = new UserCookie();
             newUserCookie.setUser(user);
             newUserCookie.setPlatform(Platforms.NETEASE.getNumVal());
@@ -88,8 +88,8 @@ public class NeteaseLoginService {
         body.add("cookie", userCookie.getData());
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-        if(param != null)
-            return restTemplate.exchange(url+paramList, HttpMethod.POST, requestEntity, JSONObject.class, param);
+        if (param != null)
+            return restTemplate.exchange(url + paramList, HttpMethod.POST, requestEntity, JSONObject.class, param);
         else
             return restTemplate.exchange(url, HttpMethod.POST, requestEntity, JSONObject.class);
     }

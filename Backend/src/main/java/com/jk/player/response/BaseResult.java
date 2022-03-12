@@ -6,10 +6,6 @@ public class BaseResult<T> {
     private String message;
     private T data;
 
-    public BaseResult(int code) {
-        this.code = code;
-    }
-
     public BaseResult(ResponseCode responseCode) {
         this.code = responseCode.getCode();
         this.message = responseCode.getMessage();
@@ -19,12 +15,6 @@ public class BaseResult<T> {
     public BaseResult(ResponseCode responseCode, T data) {
         this.code = responseCode.getCode();
         this.message = responseCode.getMessage();
-        this.data = data;
-    }
-
-    public BaseResult(int code, String message, T data) {
-        this.code = code;
-        this.message = message;
         this.data = data;
     }
 
